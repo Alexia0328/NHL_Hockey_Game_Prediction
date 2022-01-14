@@ -1,0 +1,24 @@
+# To build a container, you will use the docker build command
+# https://docs.docker.com/engine/reference/commandline/build/
+#
+#   docker build -t <IMAGE TAG> -f Dockerfile.serving .
+#   docker build -t <IMAGE TAG> -f Dockerfile.jupyter .
+#
+
+
+# https://docs.docker.com/engine/reference/builder/#from
+# You shouldn't need to change this
+FROM python:3.7
+
+WORKDIR /code
+
+COPY /ift6758/requirements.txt requirements.txt
+COPY models /code/models
+COPY app.py /code/app.py
+
+RUN python -m pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+ 
+# EXPOSE 3000
+
+CMD ["waitress-serve", "--listen=0.0.0.0:3000", "app:app"]

@@ -1,0 +1,31 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  serving:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.serving
+    image: ift6758/serving:1.0.0
+    container_name: serving_app
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    environment:
+      - COMET_API_KEY=${COMET_API_KEY}
+      - LOG_FILE=${LOG_FILE}
+
+###### Uncomment below when you're ready to add the final notebook container to your docker compose
+  jupyter:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.jupyter
+    image: ift6758/jupyter:1.0.0
+    container_name: jupyter_app
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+#    environment:
+#      OTHER_DOCKER_ENV_VAR = ${OTHER_LOCAL_ENV_VAR}   
