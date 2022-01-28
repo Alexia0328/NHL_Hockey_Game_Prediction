@@ -1,0 +1,24 @@
+# To build a container, you will use the docker build command
+# https://docs.docker.com/engine/reference/commandline/build/
+#
+#   docker build -t <IMAGE TAG> -f Dockerfile.serving .
+#   docker build -t <IMAGE TAG> -f Dockerfile.jupyter .
+#
+
+
+# https://docs.docker.com/engine/reference/builder/#from
+# You shouldn't need to change this
+FROM python:3.7
+
+WORKDIR /code
+
+COPY ift6758 /code/ift6758
+COPY demo.ipynb /code/demo.ipynb
+
+RUN python -m pip install --upgrade pip
+RUN pip install --no-cache-dir -e ift6758/
+RUN pip install --no-cache-dir -r ift6758/requirements.txt
+
+# EXPOSE 3001
+
+CMD ["jupyter-lab", "--port=3001", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
